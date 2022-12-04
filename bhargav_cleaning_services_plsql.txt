@@ -1,0 +1,104 @@
+ 
+-- Host: 127.0.0.1
+-- Generation Time: Dec 03, 2022 at 02:35 AM
+-- Server version: 10.4.19-MariaDB
+ 
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `cleaning_services`
+--
+
+DELIMITER $$
+--
+--PL/SQL Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `client_details` (IN `emai` VARCHAR(100), OUT `phon` VARCHAR(100), OUT `nam` VARCHAR(100), OUT `l1` VARCHAR(100), OUT `l2` VARCHAR(100), OUT `cit` VARCHAR(100), OUT `zi` VARCHAR(100))  select name,phone,line1,line2,city,zip INTO nam,phon,l1,l2,cit,zi from client where email=emai$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `csignup1pcd` (IN `nam` VARCHAR(100), IN `phon` VARCHAR(100), IN `emai` VARCHAR(100), IN `passwor` VARCHAR(100), IN `l1` VARCHAR(100), IN `l2` VARCHAR(100), IN `cit` VARCHAR(100), IN `zi` VARCHAR(100))  INSERT INTO client(name,phone, email,password,line1,line2,city,zip)
+VALUES( nam,phon,emai,passwor,l1,l2,cit,zi)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `login_auth_pcd` (IN `emai` VARCHAR(100), IN `pwd` VARCHAR(100), OUT `nam` VARCHAR(100), OUT `l1` VARCHAR(100), OUT `l2` VARCHAR(100), OUT `cit` VARCHAR(100))  select name,line1,line2,city INTO nam,l1,l2,cit from client where email=emai && password=pwd$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `profile_update_action` (IN `nam` VARCHAR(50), IN `phon` VARCHAR(50), IN `cit` VARCHAR(50), IN `l1` VARCHAR(50), IN `l2` VARCHAR(50), IN `zi` VARCHAR(50), IN `emai` VARCHAR(50))  update client  set name=nam, phone=phon, city=cit, line1=l1, line2=l2, zip=zi where email=emai$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `client`
+--
+
+CREATE TABLE `client` (
+  `name` varchar(100) DEFAULT NULL,
+  `phone` varchar(100) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `line1` varchar(100) DEFAULT NULL,
+  `line2` varchar(100) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `zip` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requirement`
+--
+
+CREATE TABLE `requirement` (
+  `orderid` int(11) NOT NULL,
+  `client_name` varchar(100) DEFAULT NULL,
+  `client_email` varchar(100) DEFAULT NULL,
+  `selected_date` varchar(100) DEFAULT NULL,
+  `cost_per_visit` varchar(100) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `status` varchar(100) DEFAULT 'open'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requirementdetails`
+--
+
+CREATE TABLE `requirementdetails` (
+  `orderid` int(11) DEFAULT NULL,
+  `service` varchar(100) DEFAULT NULL,
+  `sq_ft` int(11) DEFAULT NULL,
+  `cost` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ 
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `client`
+--
+ALTER TABLE `client`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `requirement`
+--
+ALTER TABLE `requirement`
+  ADD PRIMARY KEY (`orderid`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
